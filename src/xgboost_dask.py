@@ -8,8 +8,6 @@ socket.getfqdn = lambda: "localhost"
 os.environ["DMLC_TRACKER_URI"] = "127.0.0.1"
 os.environ["DMLC_TRACKER_PORT"] = "9091"
 
-import xgboost as xgb
-print(dir(xgb))
 
 from dask.distributed import Client, LocalCluster
 import dask.dataframe as dd
