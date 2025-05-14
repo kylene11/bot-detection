@@ -5,11 +5,11 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 import shap
 import matplotlib.pyplot as plt
 
-# Load datasets
-X_train = pd.read_csv("../data/X_train.csv")
-y_train = pd.read_csv("../data/y_train.csv").squeeze()
-X_val = pd.read_csv("../data/X_val.csv")
-y_val = pd.read_csv("../data/y_val.csv").squeeze()
+# Load datasets from Parquet
+X_train = pd.read_parquet("../data/X_train.parquet")
+y_train = pd.read_parquet("../data/y_train.parquet")["label"]
+X_val = pd.read_parquet("../data/X_val.parquet")
+y_val = pd.read_parquet("../data/y_val.parquet")["label"]
 
 # Train model
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -30,30 +30,22 @@ print(classification_report(y_val, y_pred))
 explainer = shap.Explainer(clf, X_train)
 shap_values = explainer(X_val)
 
-# Check shape
-print("shap_values shape:", shap_values.values.shape)  # (139, 7, 2)
+print("shap_values shape:", shap_values.values.shape)
 
-
-## SHAP values (more positive -> more likely to be said class)
-# the feature’s impact on the model’s output
-
-
-# Class 1 (bot)
+# SHAP values plots
 plt.figure(figsize=(8, 6))
 shap.summary_plot(shap_values[..., 1], X_val, plot_type="dot", show=False)
 plt.title("Class 1 (Bot)")
 plt.tight_layout()
 plt.show()
 
-# Class 0 (human)
 plt.figure(figsize=(8, 6))
 shap.summary_plot(shap_values[..., 0], X_val, plot_type="dot", show=False)
 plt.title("Class 0 (Human)")
 plt.tight_layout()
 plt.show()
 
-
-# Compute and plot confusion matrix
+# Confusion matrix
 cm = confusion_matrix(y_val, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Human", "Bot"])
 disp.plot(cmap="Blues")
