@@ -30,7 +30,7 @@ print(classification_report(y_val, y_pred))
 explainer = shap.Explainer(clf, X_train)
 shap_values = explainer(X_val)
 
-print("shap_values shape:", shap_values.values.shape)
+
 
 # SHAP values plots
 plt.figure(figsize=(8, 6))
