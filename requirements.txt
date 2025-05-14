@@ -14,6 +14,6 @@ distributed
 xgboost>=1.6.0  # Ensure version supports dask module
 lightgbm
 
-# # Parquet file I/O
-# pyarrow
-# fastparquet
+# Parquet file I/O
+pyarrow>= 8.0.0
+fastparquet
