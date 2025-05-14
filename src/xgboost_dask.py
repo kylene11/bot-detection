@@ -26,7 +26,7 @@ def main():
     client = Client(cluster)
     print("✅ Dask cluster started")
 
-    # Load dataset (Parquet is efficient for large datasets)
+    # Load dataset 
     X_train = dd.read_parquet("../data/X_train.parquet")
     y_train = dd.read_parquet("../data/y_train.parquet")["label"]
     X_val = dd.read_parquet("../data/X_val.parquet")

@@ -5,7 +5,7 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 import shap
 import matplotlib.pyplot as plt
 
-# Load datasets from Parquet
+# Load datasets 
 X_train = pd.read_parquet("../data/X_train.parquet")
 y_train = pd.read_parquet("../data/y_train.parquet")["label"]
 X_val = pd.read_parquet("../data/X_val.parquet")

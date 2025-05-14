@@ -8,15 +8,24 @@ import matplotlib.pyplot as plt
 import itertools
 import time
 import shap
+#from dask_saturn import SaturnCluster
+
+      
 
 def main():
     
+    # # Start Saturn Dask cluster
+    # cluster = SaturnCluster()
+    # client = Client(cluster)
+    # print("✅ Saturn cluster started")
+
+
     # Start Dask cluster
     cluster = LocalCluster(n_workers=4, threads_per_worker=2, memory_limit="4GB")
     client = Client(cluster)
     print("✅ Dask cluster started")
 
-    # Load training data
+    # Load datasets
 
     X_train = dd.read_parquet("../data/X_train.parquet")
     y_train = dd.read_parquet("../data/y_train.parquet")["label"]
@@ -73,8 +82,8 @@ def main():
     #             "max_depth": max_depth,
     #             "num_leaves": num_leaves
     #         }
-
     # print("\n✅ Best params:", best_params)
+
     # Use best known parameters
     best_model = DaskLGBMClassifier(
         objective="binary",
@@ -113,7 +122,7 @@ def main():
     
 
 
-    # Compute and plot confusion matrix
+    # Confusion matrix
     cm = confusion_matrix(y_val, y_pred)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Human", "Bot"])
     disp.plot(cmap="Blues")
