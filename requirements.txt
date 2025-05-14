@@ -1,0 +1,19 @@
+# Core data and ML libraries
+pandas
+numpy
+scikit-learn
+matplotlib
+shap
+
+# Dask and distributed computing
+dask[complete]
+dask-ml
+distributed
+
+# XGBoost and LightGBM for scalable ML
+xgboost>=1.6.0  # Ensure version supports dask module
+lightgbm
+
+# # Parquet file I/O
+# pyarrow
+# fastparquet
