@@ -24,6 +24,7 @@ time_per_account = total_time / len(y_val)
 
 print(f"\n🕒 Total prediction time: {total_time:.4f} seconds")
 print(f"⏱️ Average time per account: {time_per_account:.6f} seconds")
+print("🔍 Final Classification Report:")
 print(classification_report(y_val, y_pred))
 
 # SHAP explainer

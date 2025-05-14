@@ -8,6 +8,8 @@ socket.getfqdn = lambda: "localhost"
 os.environ["DMLC_TRACKER_URI"] = "127.0.0.1"
 os.environ["DMLC_TRACKER_PORT"] = "9091"
 
+import xgboost as xgb
+print(dir(xgb))
 
 from dask.distributed import Client, LocalCluster
 import dask.dataframe as dd
@@ -48,7 +50,7 @@ def main():
     }
 
     # Train
-    start = time.time()
+    
     output = xgb.dask.train(
     client,
     params,
@@ -58,15 +60,21 @@ def main():
     
 )
 
-    end = time.time()
-    print(f"✅ Training completed in {end - start:.2f} seconds")
+    
 
     # Predict
+    start_time = time.time()
     preds = xgb.dask.predict(client, output["booster"], X_val).compute()
     preds_binary = (preds > 0.5).astype(int)
     y_val_true = y_val.compute()
+    end_time = time.time()
+    total_time = end_time - start_time
+    time_per_account = total_time / len(y_val)
 
     # Evaluation
+    print(f"\n🕒 Total prediction time: {total_time:.4f} seconds")
+    print(f"⏱️ Average time per account: {time_per_account:.6f} seconds")
+    print("🔍 Final Classification Report:")
     print(classification_report(y_val_true, preds_binary))
     cm = confusion_matrix(y_val_true, preds_binary)
     ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Human", "Bot"]).plot(cmap="Blues")
